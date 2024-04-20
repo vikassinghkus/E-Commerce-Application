@@ -1,78 +1,80 @@
 ﻿using E_Commerce.DataAccess.Data;
+using E_Commerce.DataAccess.Repository.IRepository;
 using E_Commerce.Models;
 using Microsoft.AspNetCore.Mvc;
 
-namespace E_Commerce.Web.Controllers
+namespace E_Commerce.Web.Areas.Admin.Controllers
 {
+    [Area("Admin")]
     public class CategoryController : Controller
     {
-        ApplicationDbContext _context;
-        public CategoryController(ApplicationDbContext context)
+        private readonly IUnitOfWork _unitOfWork;
+        public CategoryController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
-        [Route("Category/Category-list")]
+        [Route("[area]/[controller]/Category-list")]
         public IActionResult Index()
         {
-            List<Category> category = _context.Categories.ToList();
+            List<Category> category = _unitOfWork.category.GetAll().ToList();
             return View(category);
         }
         [HttpGet]
-        [Route("Category/Add-Category")]    
+        [Route("[area]/[controller]/Add-Category")]
         public IActionResult CreateCategory()
         {
             return View();
         }
         [HttpPost]
-        [Route("Category/Add-Category")]
+        [Route("[area]/[controller]/Add-Category")]
         public IActionResult CreateCategory(Category category)
         {
-            if(ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-                _context.Categories.Add(category);
-                _context.SaveChanges();
+                _unitOfWork.category.Add(category);
+                _unitOfWork.Save();
                 TempData["Success"] = "Category Created Successfully!";
                 return RedirectToAction("Index");
             }
             return View(category);
         }
         [HttpGet]
-        [Route("Category/Update-Category/{Id}")]
+        [Route("[area]/[controller]/Update-Category/{Id}")]
         public IActionResult EditCategory(int id)
         {
-            if(id==0 || id == null)
+            if (id == 0 || id == null)
             {
                 return NotFound();
             }
-            Category category = _context.Categories.Find(id);
-            if(category == null)
+            Category category = _unitOfWork.category.Get(c => c.Id == id);
+            if (category == null)
             {
                 return NotFound();
             }
             return View(category);
         }
         [HttpPost]
-        [Route("Category/Update-Category/{Id}")]
+        [Route("[area]/[controller]/Update-Category/{Id}")]
         public IActionResult EditCategory(Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Categories.Update(category);
-                _context.SaveChanges();
+                _unitOfWork.category.Update(category);
+                _unitOfWork.Save();
                 TempData["Success"] = "Category Update Successfully!";
                 return RedirectToAction("Index");
             }
             return View();
         }
         [HttpGet]
-        [Route("Category/Delete-Category/{Id}")]
+        [Route("[area]/[controller]/Delete-Category/{Id}")]
         public IActionResult DeleteCategory(int? id)
         {
             if (id == 0 || id == null)
             {
                 return NotFound();
             }
-            Category category = _context.Categories.Find(id);
+            Category category = _unitOfWork.category.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -80,16 +82,16 @@ namespace E_Commerce.Web.Controllers
             return View(category);
         }
         [HttpPost, ActionName("DeleteCategory")]
-        [Route("Delete-Category/{Id}")]
+        [Route("[area]/[controller]/Delete-Category/{Id}")]
         public IActionResult DeleteCategoryPost(int? id)
         {
-            Category category = _context.Categories.Find(id);
+            Category category = _unitOfWork.category.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
-            _context.Categories.Remove(category);
-            _context.SaveChanges();
+            _unitOfWork.category.Remove(category);
+            _unitOfWork.Save();
             TempData["Success"] = "Category Delete Successfully!";
             return RedirectToAction("Index");
         }
