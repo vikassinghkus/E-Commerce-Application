@@ -1,7 +1,7 @@
-﻿using E_Commerce.Web.Models;
+﻿using E_Commerce.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace E_Commerce.Web.Data
+namespace E_Commerce.DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
@@ -14,7 +14,7 @@ namespace E_Commerce.Web.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id=1, Name="Vikas Singh", DisplayOrder=1},
+                new Category { Id=1, Name="Action", DisplayOrder=1},
                 new Category { Id=2, Name="History", DisplayOrder=2},
                 new Category { Id=3, Name="Sci-fi", DisplayOrder=3}
                 );
