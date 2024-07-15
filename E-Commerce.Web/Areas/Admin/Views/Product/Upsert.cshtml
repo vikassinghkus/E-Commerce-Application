@@ -1,0 +1,100 @@
+﻿@model ProductVM
+
+<div class="card shadow border-0 mt-4">
+    <div class="card-header bg-secondary bg-gradient py-3 ml-0">
+        <div class="row">
+            <h2 class="text-center text-white">@(Model.Product.Id == 0 ? "Create":"Update") Products</h2>
+        </div>
+    </div>
+    <div class="card-body p-4">
+        <form class="row" asp-action="Upsert" asp-controller="Product" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Product.Id"/>
+            <div class="border p-4">
+                <div class="row mb-3">
+                    <label asp-for="Product.Title"></label>
+                    <input type="text" asp-for="Product.Title" class="form-control" />
+                    <span asp-validation-for="Product.Title" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.Description"></label>
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.ISBN"></label>
+                    <input type="text" asp-for="Product.ISBN" class="form-control" />
+                    <span asp-validation-for="Product.ISBN" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.Author"></label>
+                    <input type="text" asp-for="Product.Author" class="form-control" />
+                    <span asp-validation-for="Product.Author" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.ListPrice"></label>
+                    <input type="text" asp-for="Product.ListPrice" class="form-control" />
+                    <span asp-validation-for="Product.ListPrice" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.Price"></label>
+                    <input type="text" asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.Price50"></label>
+                    <input type="text" asp-for="Product.Price50" class="form-control" />
+                    <span asp-validation-for="Product.Price50" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.Price100"></label>
+                    <input type="text" asp-for="Product.Price100" class="form-control" />
+                    <span asp-validation-for="Product.Price100" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.CategoryId"></label>
+                    <select asp-for="Product.CategoryId" class="form-select" asp-items="@Model.CategoryList">
+                        <option disabled selected>--Select Category--</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+                <div class="row mb-3">
+                    <label asp-for="Product.ImageUrl"></label>
+                    <input type="file" class="form-control" />
+                </div>
+                <div class="row">
+                    <div class="col-6 col-md-3">
+                        @if (Model.Product.Id != 0)
+                        {
+                            <input type="submit" class="btn btn-primary form-control" value="Update" />
+                        }
+                        else
+                        {
+                            <input type="submit" class="btn btn-primary form-control" value="Submit" />
+                        }
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <a class="btn btn-outline-secondary form-control" asp-action="Index" asp-controller="Product">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    @{
+        <script>
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount checklist mediaembed casechange export formatpainter pageembed linkchecker a11ychecker tinymcespellchecker permanentpen powerpaste advtable advcode editimage advtemplate ai mentions tinycomments tableofcontents footnotes mergetags autocorrect typography inlinecss markdown',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table mergetags | addcomment showcomments | spellcheckdialog a11ycheck typography | align lineheight | checklist numlist bullist indent outdent | emoticons charmap | removeformat',
+                tinycomments_mode: 'embedded',
+                tinycomments_author: 'Author name',
+                mergetags_list: [
+                    { value: 'First.Name', title: 'First Name' },
+                    { value: 'Email', title: 'Email' },
+                ],
+                ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant")),
+            });
+        </script>
+        <partial name="_ValidationScriptsPartial"/>
+    }
+}

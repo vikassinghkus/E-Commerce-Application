@@ -16,7 +16,7 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
         [Route("[area]/[controller]/Category-list")]
         public IActionResult Index()
         {
-            List<Category> category = _unitOfWork.category.GetAll().ToList();
+            List<Category> category = _unitOfWork.Category.GetAll().ToList();
             return View(category);
         }
         [HttpGet]
@@ -31,7 +31,7 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.category.Add(category);
+                _unitOfWork.Category.Add(category);
                 _unitOfWork.Save();
                 TempData["Success"] = "Category Created Successfully!";
                 return RedirectToAction("Index");
@@ -46,7 +46,7 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Category category = _unitOfWork.category.Get(c => c.Id == id);
+            Category category = _unitOfWork.Category.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -59,7 +59,7 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.category.Update(category);
+                _unitOfWork.Category.Update(category);
                 _unitOfWork.Save();
                 TempData["Success"] = "Category Update Successfully!";
                 return RedirectToAction("Index");
@@ -74,7 +74,7 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
             {
                 return NotFound();
             }
-            Category category = _unitOfWork.category.Get(c => c.Id == id);
+            Category category = _unitOfWork.Category.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
@@ -85,12 +85,12 @@ namespace E_Commerce.Web.Areas.Admin.Controllers
         [Route("[area]/[controller]/Delete-Category/{Id}")]
         public IActionResult DeleteCategoryPost(int? id)
         {
-            Category category = _unitOfWork.category.Get(c => c.Id == id);
+            Category category = _unitOfWork.Category.Get(c => c.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
-            _unitOfWork.category.Remove(category);
+            _unitOfWork.Category.Remove(category);
             _unitOfWork.Save();
             TempData["Success"] = "Category Delete Successfully!";
             return RedirectToAction("Index");
