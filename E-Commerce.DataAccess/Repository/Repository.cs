@@ -29,10 +29,11 @@ namespace E_Commerce.DataAccess.Repository
             dbSet.Add(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter)
+        public T Get(Expression<Func<T, bool>> filter, bool tracked = true)
         {
             IQueryable<T> query = dbSet; // IQueryable<Category> query = dbSet;
             //Category category =  _db.Categories.Where(c=>c.Id==Id).FirstOrDefault();
+            if (!tracked) { query = query.AsNoTracking(); }
             query = query.Where(filter); 
             return query.FirstOrDefault();
         }
